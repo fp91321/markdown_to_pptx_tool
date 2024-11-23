@@ -1,20 +1,6 @@
-\`\`\`json  
-// code for coloring  
-\`\`\`
-\`\`\`html  
-// code for coloring  
-\`\`\`
-\`\`\`js  
-// code for coloring  
-\`\`\`  
-\`\`\`css  
-// code for coloring  
-\`\`\`
-// etc.
+# <code style="color:#FFFFFF;">Markdown_to_pptx_tool</code>
 
-# <span style="color:#FFFFFF;">Markdown_to_pptx_tool</span>
-
-### <span style="color:#FFFF00;">Outline</span>
+### <code style="color:#FFFF00;">Outline</code>
 * <span style="color:#21F6F3;">Section 1</span>
 * <span style="color:#21F6F3;">Section 2</span>
 
