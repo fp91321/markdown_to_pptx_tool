@@ -36,6 +36,6 @@
   - Subpoint 2
   - Subpoint 3
 ```
-```
+```python =
 pyinstaller -F -w .\markdown_to_pptx.py --collect-all tkinterdnd2
 ```
