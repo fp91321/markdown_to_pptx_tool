@@ -16,11 +16,11 @@ def markdown_to_pptx(md_text, output_file):
     for line in lines:
         line = line.rstrip()  # 去掉多餘右空格
         if line.startswith("# "):
-            # 添加標題投影片
+            # 添加封面標題投影片
             slide = presentation.slides.add_slide(presentation.slide_layouts[0])
             slide.shapes.title.text = line[2:]
         elif line.startswith("## "):
-            # 添加内容投影片，並將内容作為標題
+            # 添加章節内容投影片，並將内容作為標題
             slide = presentation.slides.add_slide(presentation.slide_layouts[1])
             slide.shapes.title.text = line[3:]
         elif line.startswith("### "):
