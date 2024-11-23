@@ -1,42 +1,50 @@
 # $${\color{lightblue} Markdown\ to\ pptx\ tool}$$
 
-### $${ \color{orange} Outline }$$
+### $${ \color{lightgreen} Outline }$$
 * $${\color{cyan}Section \ 1}$$
 * $${\color{cyan}Section \ 2}$$
+* $${\color{cyan}Conclusion}$$
 
 ## $${\color{cyan}Section \space 1}$$
 
 ### $${\color{pink}Slide \space 1}$$
 * $${\color{magenta}Point \space 1}$$
 * $${\color{magenta}Point \space 2}$$
-  - $${\color{teal}Subpoint \space 1}$$
-    - $${\color{gray}Sub-subpoint \space 1}$$
-  - $${\color{teal}Subpoint \space 2}$$
+  - $${\color{orange}Subpoint \space 1}$$
+    - $${\color{lightblue}Sub-subpoint \space 1}$$
+  - $${\color{orange}Subpoint \space 2}$$
 
 ### $${\color{pink}Slide \space 2}$$
 - $${\color{lime}Main \space point}$$
-  - $${\color{gold}Subpoint \space 1}$$
-    - $${\color{red}Sub-subpoint \space 1}$$
-    - $${\color{blue}Sub-subpoint \space 2}$$
+  - $${\color{orange}Subpoint \space 1}$$
+    - $${\color{lightblue}Sub-subpoint \space 1}$$
+    - $${\color{lightblue}Sub-subpoint \space 2}$$
   - $${\color{orange}Subpoint \space 2}$$
-  - $${\color{purple}Subpoint \space 3}$$
+  - $${\color{orange}Subpoint \space 3}$$
 
 ## $${\color{cyan}Section \space 2}$$
 
 ### $${\color{pink}Slide \space 1}$$
 * $${\color{magenta}Point \space 1}$$
 * $${\color{magenta}Point \space 2}$$
-  - $${\color{teal}Subpoint \space 1}$$
-    - $${\color{gray}Sub-subpoint \space 1}$$
-  - $${\color{teal}Subpoint \space 2}$$
+  - $${\color{orange}Subpoint \space 1}$$
+    - $${\color{lightblue}Sub-subpoint \space 1}$$
+  - $${\color{orange}Subpoint \space 2}$$
 
 ### $${\color{pink}Slide \space 2}$$
 - $${\color{lime}Main \space point}$$
-  - $${\color{gold}Subpoint \space 1}$$
-    - $${\color{red}Sub-subpoint \space 1}$$
-    - $${\color{blue}Sub-subpoint \space 2}$$
+  - $${\color{orange}Subpoint \space 1}$$
+    - $${\color{lightblue}Sub-subpoint \space 1}$$
+    - $${\color{lightblue}Sub-subpoint \space 2}$$
   - $${\color{orange}Subpoint \space 2}$$
-  - $${\color{purple}Subpoint \space 3}$$
+  - $${\color{orange}Subpoint \space 3}$$
+
+## $${\color{cyan}Conclusion }$$
+### $${\color{pink}Outlook}$$
+* $${\color{magenta}Point \space 1}$$
+* $${\color{magenta}Point \space 2}$$
+
+## $${\color{cyan}Thanks for listening }$$
 
 ## <span style="color: yellow;">請遵循以下格式 Please follow the format below</span>
 
