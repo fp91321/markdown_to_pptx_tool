@@ -1,44 +1,45 @@
-# <code style="color: red ">Markdown_to_pptx_tool</code>
-# $${\color{red}Welcome \space \color{lightblue}To \space \color{orange}Stackoverflow}$$
-### <code style="color:gold ">Outline</code>
-* <span style="color:#21F6F3;">Section 1</span>
-* <span style="color:#21F6F3;">Section 2</span>
+# $${\color{lightblue} Markdown\ to\ pptx\ tool}$$
 
-## <span style="color:#21F6F3;">Section 1</span>
+### $${ \color{orange} Outline }$$
+* $${\color{cyan}Section \ 1}$$
+* $${\color{cyan}Section \ 2}$$
 
-### <span style="color:#FFA7BF;">Slide 1</span>
-* Point 1
-* Point 2
-  - Subpoint 1
-    - <span style="color:#607D8F;">Sub-subpoint 1</span>
-  - Subpoint 2
+## $${\color{cyan}Section \space 1}$$
 
-### <span style="color:#FFA7BF;">Slide 2</span>
-- Main point
-  - Subpoint 1
-    - <span style="color:#607D8B;">Sub-subpoint 1</span>
-    - <span style="color:#607D8B;">Sub-subpoint 2</span>
-  - Subpoint 2
-  - Subpoint 3
+### $${\color{pink}Slide \space 1}$$
+* $${\color{magenta}Point \space 1}$$
+* $${\color{magenta}Point \space 2}$$
+  - $${\color{teal}Subpoint \space 1}$$
+    - $${\color{gray}Sub-subpoint \space 1}$$
+  - $${\color{teal}Subpoint \space 2}$$
 
-## <span style="color:#21F6F3;">Section 2</span>
+### $${\color{pink}Slide \space 2}$$
+- $${\color{lime}Main \space point}$$
+  - $${\color{gold}Subpoint \space 1}$$
+    - $${\color{red}Sub-subpoint \space 1}$$
+    - $${\color{blue}Sub-subpoint \space 2}$$
+  - $${\color{orange}Subpoint \space 2}$$
+  - $${\color{purple}Subpoint \space 3}$$
 
-### <span style="color:#FFA7BF;">Slide 1</span>
-* Point 1
-* Point 2
-  - Subpoint 1
-    - <span style="color:#607D8B;">Sub-subpoint 1</span>
-  - Subpoint 2
+## $${\color{cyan}Section \space 2}$$
 
-### <span style="color:#FFA7BF;">Slide 2</span>
-- Main point
-  - Subpoint 1
-    - <span style="color:#607D8B;">Sub-subpoint 1</span>
-    - <span style="color:#607D8B;">Sub-subpoint 2</span>
-  - Subpoint 2
-  - Subpoint 3
+### $${\color{pink}Slide \space 1}$$
+* $${\color{magenta}Point \space 1}$$
+* $${\color{magenta}Point \space 2}$$
+  - $${\color{teal}Subpoint \space 1}$$
+    - $${\color{gray}Sub-subpoint \space 1}$$
+  - $${\color{teal}Subpoint \space 2}$$
 
-## <span style="color:#FFFF00;">請遵循以下格式 Please follow the format below
+### $${\color{pink}Slide \space 2}$$
+- $${\color{lime}Main \space point}$$
+  - $${\color{gold}Subpoint \space 1}$$
+    - $${\color{red}Sub-subpoint \space 1}$$
+    - $${\color{blue}Sub-subpoint \space 2}$$
+  - $${\color{orange}Subpoint \space 2}$$
+  - $${\color{purple}Subpoint \space 3}$$
+
+## <span style="color: yellow;">請遵循以下格式 Please follow the format below</span>
+
 ```
 # Markdown_to_pptx_tool
 
