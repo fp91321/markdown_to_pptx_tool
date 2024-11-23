@@ -44,9 +44,9 @@
 * $${\color{magenta}Point \space 1}$$
 * $${\color{magenta}Point \space 2}$$
 
-## $${\color{cyan}Thanks for listening }$$
+## $${\color{cyan}Thanks\ for\ listening }$$
 
-## <span style="color: yellow;">請遵循以下格式 Please follow the format below</span>
+## 請遵循以下格式 Please follow the format below
 
 ```
 # Markdown_to_pptx_tool
@@ -54,6 +54,7 @@
 ### Outline
 * Section 1
 * Section 2
+* Conclusion
 
 ## Section 1
 ### Slide 1
@@ -86,6 +87,10 @@
     - Sub-subpoint 2
   - Subpoint 2
   - Subpoint 3
+
+## Conclusion
+* Point 1
+* Point 2
 ```
 
 ##
