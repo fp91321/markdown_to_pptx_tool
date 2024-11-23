@@ -1,6 +1,6 @@
-# <code style="color:#FFFFFF;">Markdown_to_pptx_tool</code>
+# <code style="color: red ">Markdown_to_pptx_tool</code>
 
-### <code style="color:#FFFF00;">Outline</code>
+### <code style="color:gold ">Outline</code>
 * <span style="color:#21F6F3;">Section 1</span>
 * <span style="color:#21F6F3;">Section 2</span>
 
