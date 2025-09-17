@@ -72,12 +72,14 @@ class MarkdownEditorApp(TkinterDnD.Tk if DRAG_DROP_AVAILABLE else tk.Tk):
             
             # 預覽模式切換
             self.preview_mode = tk.StringVar(value="rendered")
+            """
             tk.Radiobutton(toolbar, text="渲染預覽", variable=self.preview_mode, 
                           value="rendered", command=self.update_preview, 
                           fg="white", bg="#2d2d2d", selectcolor="#2d2d2d").pack(side=tk.LEFT, padx=(10, 5))
             tk.Radiobutton(toolbar, text="原始碼預覽", variable=self.preview_mode, 
                           value="raw", command=self.update_preview,
                           fg="white", bg="#2d2d2d", selectcolor="#2d2d2d").pack(side=tk.LEFT)
+            """
             
             # 主要內容區域
             content_frame = tk.Frame(main_frame, bg="#2d2d2d")
@@ -188,36 +190,43 @@ class MarkdownEditorApp(TkinterDnD.Tk if DRAG_DROP_AVAILABLE else tk.Tk):
             self.preview.config(state=tk.DISABLED)
         
     def parse_markdown_to_text(self, markdown_text):
-        """直接解析 Markdown 並保持格式"""
+        """直接解析 Markdown 並保持格式，返回格式化信息"""
         try:
             lines = markdown_text.splitlines()
-            formatted_lines = []
+            formatted_data = []  # 存儲 (text, tag) 的列表
             
             for line in lines:
                 if not line.strip():
-                    formatted_lines.append("")
+                    formatted_data.append(("", "normal"))
                     continue
                     
-                # 標題處理
+                # 標題處理 - 不同層級使用不同字體大小
                 if line.startswith("# "):
-                    formatted_lines.append("═══ " + line[2:] + " ═══")
+                    text = "\n═══ " + line[2:] + " ═══\n\n"
+                    formatted_data.append((text, "h1"))
                 elif line.startswith("## "):
-                    formatted_lines.append("▶ " + line[3:])
+                    text = "\n▶ " + line[3:] + "\n"
+                    formatted_data.append((text, "h2"))
                 elif line.startswith("### "):
-                    formatted_lines.append("● " + line[4:])
+                    text = "\n● " + line[4:] + "\n"
+                    formatted_data.append((text, "h3"))
                 elif line.startswith("#### "):
-                    formatted_lines.append("◆ " + line[5:])
+                    text = "◆ " + line[5:] + "\n"
+                    formatted_data.append((text, "h4"))
                 elif line.startswith("##### "):
-                    formatted_lines.append("◇ " + line[6:])
+                    text = "◇ " + line[6:] + "\n"
+                    formatted_data.append((text, "h5"))
                 elif line.startswith("###### "):
-                    formatted_lines.append("○ " + line[7:])
+                    text = "○ " + line[7:] + "\n"
+                    formatted_data.append((text, "h6"))
                 
                 # 列表處理 - 保持原始縮排
                 elif line.lstrip().startswith(("- ", "* ", "+ ")):
                     leading_spaces = len(line) - len(line.lstrip())
                     indent = " " * leading_spaces
                     content = line.lstrip()[2:]
-                    formatted_lines.append(f"{indent}• {content}")
+                    text = f"{indent}• {content}\n"
+                    formatted_data.append((text, "list"))
                     
                 # 數字列表處理
                 elif re.match(r'^\s*\d+\.\s', line):
@@ -227,33 +236,89 @@ class MarkdownEditorApp(TkinterDnD.Tk if DRAG_DROP_AVAILABLE else tk.Tk):
                     if match:
                         number = match.group(2)
                         content = match.group(3)
-                        formatted_lines.append(f"{indent}{number}. {content}")
+                        text = f"{indent}{number}. {content}\n"
+                        formatted_data.append((text, "list"))
                     else:
-                        formatted_lines.append(line)
+                        formatted_data.append((line + "\n", "normal"))
                         
-                # 代碼塊處理 - 修正語法錯誤
+                # 代碼塊處理
                 elif line.strip().startswith("```"):
                     if line.strip() == "```":
-                        formatted_lines.append("─" * 50)
+                        text = "─" * 50 + "\n"
+                        formatted_data.append((text, "code"))
                     else:
                         lang = line.strip()[3:]
-                        formatted_lines.append(f"─── {lang} ───")
+                        text = f"─── {lang} ───\n"
+                        formatted_data.append((text, "code"))
                         
                 # 引用處理
                 elif line.lstrip().startswith("> "):
                     leading_spaces = len(line) - len(line.lstrip())
                     indent = " " * leading_spaces
                     content = line.lstrip()[2:]
-                    formatted_lines.append(f"{indent}│ {content}")
+                    text = f"{indent}│ {content}\n"
+                    formatted_data.append((text, "quote"))
                     
                 # 普通段落
                 else:
-                    formatted_lines.append(line)
+                    formatted_data.append((line + "\n", "normal"))
                     
-            return "\n".join(formatted_lines)
+            return formatted_data
             
         except Exception as e:
-            return f"解析錯誤: {str(e)}"
+            return [("解析錯誤: " + str(e), "error")]
+
+    def configure_text_tags(self):
+        """配置文字標籤的字體和顏色"""
+        # 基本字體設定
+        base_font_family = "Consolas"
+        
+        # 配置不同標籤的樣式
+        self.preview.tag_configure("h1", font=(base_font_family, 18, "bold"), foreground="#000080")
+        self.preview.tag_configure("h2", font=(base_font_family, 16, "bold"), foreground="#000080")
+        self.preview.tag_configure("h3", font=(base_font_family, 14, "bold"), foreground="#000080")
+        self.preview.tag_configure("h4", font=(base_font_family, 13, "bold"), foreground="#000080")
+        self.preview.tag_configure("h5", font=(base_font_family, 12, "bold"), foreground="#000080")
+        self.preview.tag_configure("h6", font=(base_font_family, 11, "bold"), foreground="#000080")
+        self.preview.tag_configure("normal", font=(base_font_family, 10), foreground="#000000")
+        self.preview.tag_configure("list", font=(base_font_family, 10), foreground="#333333")
+        self.preview.tag_configure("code", font=(base_font_family, 9), foreground="#800080", background="#f0f0f0")
+        self.preview.tag_configure("quote", font=(base_font_family, 10, "italic"), foreground="#666666")
+        self.preview.tag_configure("error", font=(base_font_family, 10), foreground="#ff0000")
+
+    def update_preview(self):
+        """更新預覽區域 - 支援字體大小"""
+        try:
+            content = self.editor.get("1.0", tk.END)
+            
+            self.preview.config(state=tk.NORMAL)
+            self.preview.delete("1.0", tk.END)
+            
+            if self.preview_mode.get() == "rendered":
+                # 配置文字標籤（只需要配置一次）
+                if not hasattr(self, '_tags_configured'):
+                    self.configure_text_tags()
+                    self._tags_configured = True
+                
+                # 獲取格式化數據
+                formatted_data = self.parse_markdown_to_text(content)
+                
+                # 逐段插入帶有標籤的文字
+                for text, tag in formatted_data:
+                    self.preview.insert(tk.END, text, tag)
+            else:
+                # 原始 Markdown 預覽
+                self.preview.insert("1.0", content)
+                
+            self.preview.config(state=tk.DISABLED)
+            
+        except Exception as e:
+            print(f"更新預覽錯誤: {e}")
+            self.preview.config(state=tk.NORMAL)
+            self.preview.delete("1.0", tk.END)
+            self.preview.insert("1.0", f"預覽錯誤: {str(e)}", "error")
+            self.preview.config(state=tk.DISABLED)
+
         
     def new_file(self):
         """新建文件"""
