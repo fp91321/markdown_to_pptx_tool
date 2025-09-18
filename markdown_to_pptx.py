@@ -15,7 +15,8 @@ except ImportError:
 
 try:
     from pptx import Presentation
-    from pptx.util import Inches
+    from pptx.util import Inches, Pt  # ★新增 Pt 用於字體大小
+    from pptx.dml.color import RGBColor  # ★新增顏色支援（可選）
     PPTX_AVAILABLE = True
 except ImportError:
     print("警告: python-pptx 未安裝，PPTX 轉換功能將不可用")
@@ -56,10 +57,26 @@ class MarkdownEditorApp(TkinterDnD.Tk if DRAG_DROP_AVAILABLE else tk.Tk):
                 }
             }
             
+
+
+            self.ppt_font_sizes = {
+                "標題": 40,
+                "副標題": 40, 
+                "內容": 36,
+                "項目符號": 24
+            }
+
+            self.ppt_settings = {
+                "font_family": "Times New Roman",  # 字體家族
+                "title_color": RGBColor(0, 51, 102),  # 標題顏色（深藍）
+                "content_color": RGBColor(64, 64, 64),  # 內容顏色（深灰）
+                "bold_titles": True,  # 標題是否粗體
+                "slide_background": RGBColor(255, 255, 255)  # 背景顏色
+            }       
+
             self.create_widgets()
             self.setup_bindings()
-            print("GUI 初始化完成")
-            
+
         except Exception as e:
             print(f"初始化錯誤: {e}")
             messagebox.showerror("錯誤", f"程式初始化失敗: {e}")
@@ -86,23 +103,24 @@ class MarkdownEditorApp(TkinterDnD.Tk if DRAG_DROP_AVAILABLE else tk.Tk):
             toolbar.pack(fill=tk.X, pady=(0, 10))
             
             # 文件操作按鈕
-            tk.Button(toolbar, text="新建", command=self.new_file).pack(side=tk.LEFT, padx=(0, 5))
-            tk.Button(toolbar, text="開啟", command=self.open_file).pack(side=tk.LEFT, padx=(0, 5))
-            tk.Button(toolbar, text="儲存(Ctrl+S)", command=self.save_file).pack(side=tk.LEFT, padx=(0, 5))
+            tk.Button(toolbar, text="New", command=self.new_file).pack(side=tk.LEFT, padx=(0, 5))
+            tk.Button(toolbar, text="Open", command=self.open_file).pack(side=tk.LEFT, padx=(0, 5))
+            tk.Button(toolbar, text="Save(Ctrl+S)", command=self.save_file).pack(side=tk.LEFT, padx=(0, 5))
             
             # 復原/重做按鈕 - ★新增重做功能
-            tk.Button(toolbar, text="上一步 (Ctrl+Z)", command=self.undo_action).pack(side=tk.LEFT, padx=(10, 5))
-            tk.Button(toolbar, text="下一步 (Ctrl+Y)", command=self.redo_action).pack(side=tk.LEFT, padx=(0, 5))
+            tk.Button(toolbar, text="Undo(Ctrl+Z)", command=self.undo_action).pack(side=tk.LEFT, padx=(10, 5))
+            tk.Button(toolbar, text="Redo(Ctrl+Y)", command=self.redo_action).pack(side=tk.LEFT, padx=(0, 5))
             
             if PPTX_AVAILABLE:
-                tk.Button(toolbar, text="轉換成 PPTX", command=self.convert_to_pptx).pack(side=tk.LEFT, padx=(0, 5))
+                tk.Button(toolbar, text="PPT setting", command=self.show_ppt_settings).pack(side=tk.LEFT, padx=(0, 5))
+                tk.Button(toolbar, text="Convert to PPTX", command=self.convert_to_pptx).pack(side=tk.LEFT, padx=(0, 5))
             
             # 分隔線
             separator_frame = tk.Frame(toolbar, bg="#666666", width=2, height=25)
             separator_frame.pack(side=tk.LEFT, padx=10)
             
             # 字體大小選擇
-            tk.Label(toolbar, text="字體大小:", fg="white", bg="#2d2d2d").pack(side=tk.LEFT, padx=(0, 5))
+            tk.Label(toolbar, text="Font Size:", fg="white", bg="#2d2d2d").pack(side=tk.LEFT, padx=(0, 5))
             
             self.font_size_var = tk.StringVar(value=self.font_size)
             font_size_frame = tk.Frame(toolbar, bg="#2d2d2d")
@@ -191,7 +209,72 @@ class MarkdownEditorApp(TkinterDnD.Tk if DRAG_DROP_AVAILABLE else tk.Tk):
         except Exception as e:
             print(f"建立介面錯誤: {e}")
             raise
+
+    def show_ppt_settings(self):
+        """顯示PPT字體大小設定對話框"""
+        settings_window = tk.Toplevel(self)
+        settings_window.title("PPT 字體大小設定")
+        settings_window.geometry("400x300")
+        settings_window.configure(bg="#2d2d2d")
+        settings_window.resizable(False, False)
         
+        # 標題
+        title_label = tk.Label(settings_window, text="PPT 字體大小設定", 
+                            font=("Arial", 14, "bold"), fg="white", bg="#2d2d2d")
+        title_label.pack(pady=10)
+        
+        # 字體大小設定區域
+        settings_frame = tk.Frame(settings_window, bg="#2d2d2d")
+        settings_frame.pack(pady=20, padx=20, fill=tk.BOTH, expand=True)
+        
+        # 字體大小輸入框
+        font_entries = {}
+        for i, (label, default_size) in enumerate(self.ppt_font_sizes.items()):
+            row_frame = tk.Frame(settings_frame, bg="#2d2d2d")
+            row_frame.pack(fill=tk.X, pady=5)
+            
+            tk.Label(row_frame, text=f"{label}:", font=("Arial", 10), 
+                    fg="white", bg="#2d2d2d", width=10, anchor="e").pack(side=tk.LEFT, padx=(0, 10))
+            
+            entry = tk.Entry(row_frame, font=("Arial", 10), width=8)
+            entry.insert(0, str(default_size))
+            entry.pack(side=tk.LEFT)
+            font_entries[label] = entry
+            
+            tk.Label(row_frame, text="pt", font=("Arial", 10), 
+                    fg="white", bg="#2d2d2d").pack(side=tk.LEFT, padx=(5, 0))
+        
+        # 預設值按鈕
+        def reset_defaults():
+            defaults = {"標題": 40, "副標題": 40, "內容": 36, "項目符號": 24}
+            for label, entry in font_entries.items():
+                entry.delete(0, tk.END)
+                entry.insert(0, str(defaults[label]))
+        
+        # 按鈕區域
+        button_frame = tk.Frame(settings_window, bg="#2d2d2d")
+        button_frame.pack(pady=20)
+        
+        tk.Button(button_frame, text="重設預設值", command=reset_defaults).pack(side=tk.LEFT, padx=5)
+        tk.Button(button_frame, text="確定", 
+                command=lambda: self.apply_ppt_settings(font_entries, settings_window)).pack(side=tk.LEFT, padx=5)
+        tk.Button(button_frame, text="取消", 
+                command=settings_window.destroy).pack(side=tk.LEFT, padx=5)
+
+    def apply_ppt_settings(self, font_entries, window):
+        """應用PPT設定"""
+        try:
+            for label, entry in font_entries.items():
+                size = int(entry.get())
+                if size < 8 or size > 72:
+                    raise ValueError(f"{label}字體大小必須在8-72之間")
+                self.ppt_font_sizes[label] = size
+            
+            self.status_label.config(text="PPT字體大小設定已更新")
+            window.destroy()
+        except ValueError as e:
+            messagebox.showerror("錯誤", f"設定無效: {str(e)}")
+
     def setup_bindings(self):
         try:
             # 編輯器事件綁定
@@ -519,7 +602,7 @@ class MarkdownEditorApp(TkinterDnD.Tk if DRAG_DROP_AVAILABLE else tk.Tk):
             print(f"拖拽處理錯誤: {e}")
             
     def markdown_to_pptx(self, md_text, output_file):
-        """Markdown 轉 PPTX"""
+        """Markdown 轉 PPTX - 支援自訂字體大小"""
         try:
             presentation = Presentation()
             slide = None
@@ -528,19 +611,38 @@ class MarkdownEditorApp(TkinterDnD.Tk if DRAG_DROP_AVAILABLE else tk.Tk):
             for line in lines:
                 line = line.rstrip()
                 if line.startswith("# "):
+                    # 標題投影片
                     slide = presentation.slides.add_slide(presentation.slide_layouts[0])
-                    slide.shapes.title.text = line[2:]
+                    title = slide.shapes.title
+                    title.text = line[2:]
+                    # ★設定標題字體大小
+                    if title.text_frame.paragraphs:
+                        title.text_frame.paragraphs[0].font.size = Pt(self.ppt_font_sizes["標題"])
+                        
                 elif line.startswith("## "):
+                    # 副標題投影片
                     slide = presentation.slides.add_slide(presentation.slide_layouts[1])
-                    slide.shapes.title.text = line[3:]
+                    title = slide.shapes.title
+                    title.text = line[3:]
+                    # ★設定副標題字體大小
+                    if title.text_frame.paragraphs:
+                        title.text_frame.paragraphs[0].font.size = Pt(self.ppt_font_sizes["副標題"])
+                        
                 elif line.startswith("### "):
+                    # 內容投影片
                     slide = presentation.slides.add_slide(presentation.slide_layouts[1])
-                    slide.shapes.title.text = line[4:]
+                    title = slide.shapes.title
+                    title.text = line[4:]
+                    # ★設定內容標題字體大小
+                    if title.text_frame.paragraphs:
+                        title.text_frame.paragraphs[0].font.size = Pt(self.ppt_font_sizes["內容"])
+                        
                 elif line.strip().startswith(("-", "*")):
                     if not slide:
                         slide = presentation.slides.add_slide(presentation.slide_layouts[1])
                         slide.shapes.title.text = "Bullet Points"
                     
+                    # 取得或建立文字框
                     if len(slide.shapes.placeholders) > 1 and slide.shapes.placeholders[1].has_text_frame:
                         text_frame = slide.shapes.placeholders[1].text_frame
                     else:
@@ -554,10 +656,15 @@ class MarkdownEditorApp(TkinterDnD.Tk if DRAG_DROP_AVAILABLE else tk.Tk):
                     p.text = content
                     p.level = min(current_level, 4)
                     
+                    # ★設定項目符號字體大小
+                    if p.font:
+                        p.font.size = Pt(self.ppt_font_sizes["項目符號"])
+                    
             presentation.save(output_file)
             
         except Exception as e:
             raise Exception(f"PPTX 轉換錯誤: {str(e)}")
+
 
 def main():
     """主函數，包含錯誤處理"""
